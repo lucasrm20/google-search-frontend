@@ -1,0 +1,61 @@
+<div class="container">
+
+  <div class="row text-center mt-5">
+    <h1>Pesquise Algo</h1>
+  </div>
+
+  <div class="row justify-content-md-center mt-2">
+    <div class="col-md-10 col-xs-12" [formGroup]="form">
+      <div class="input-group input-group-lg mb-3">
+        <span class="input-group-text">
+          <fa-icon [icon]="faMagnifyingGlass"></fa-icon>
+        </span>
+
+        <input
+          type="text"
+          class="form-control input-lg"
+          placeholder="Buscar..."
+          formControlName="searchTerm"
+          (keyup.enter)="search()"
+        >
+      </div>
+    </div>
+
+    <div class="col-xs-12 text-center">
+      <button
+        type="button"
+        class="btn btn-dark btn-lg"
+        (click)="search()"
+        [disabled]="isSearching"
+      >
+        <fa-icon *ngIf="isSearching" [icon]="faSpinner" animation="spin" size="sm"></fa-icon>
+        {{ isSearching ? 'Aguarde' : 'Buscar' }}
+      </button>
+    </div>
+
+  </div>
+
+  <div class="row mt-4" *ngIf="searchResult">
+    <div class="nothingFound" *ngIf="searchResult.length === 0">
+      <div class="text-center">
+        <i class="fa fa-frown-o fa-4x"></i>
+      </div>
+
+      <div class="text-center">
+        <h2>Desculpe, nada encontrado.</h2>
+      </div>
+    </div>
+
+    <div class="col-xs-12 mb-2" *ngFor="let item of searchResult">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">
+            <a [href]="item.link" target="_blank">{{ item.link }}</a>
+          </h6>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
