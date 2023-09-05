@@ -14,7 +14,9 @@ import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons'
 export class SearchComponent {
 
   isSearching = false;
+  isSearchingScroll = false;
   searchResult: SearchResult[];
+  offset = 0;
 
   faMagnifyingGlass = faMagnifyingGlass;
   faSpinner = faSpinner;
@@ -30,6 +32,7 @@ export class SearchComponent {
 
   search() {
     const {searchTerm} = this.form.value;
+    this.offset = 0;
 
     this.isSearching = true;
     this.form.disable();
@@ -44,6 +47,27 @@ export class SearchComponent {
       })
       .finally(() => {
         this.isSearching = false;
+        this.form.enable();
+      });
+  }
+
+  scrollSearch() {
+    if (this.isSearchingScroll) return;
+
+    this.isSearchingScroll = true;
+
+    const {searchTerm} = this.form.value;
+    this.offset += 10;
+
+    lastValueFrom(this.searchService.search(searchTerm!, this.offset))
+      .then(result => {
+        this.searchResult.push(...result);
+      })
+      .catch(err => {
+        console.error(err);
+      })
+      .finally(() => {
+        this.isSearchingScroll = false;
         this.form.enable();
       });
   }
