@@ -31,6 +31,8 @@ export class SearchComponent {
   ) {}
 
   search() {
+    if (this.form.invalid) return;
+
     const {searchTerm} = this.form.value;
     this.offset = 0;
 
@@ -52,9 +54,10 @@ export class SearchComponent {
   }
 
   scrollSearch() {
-    if (this.isSearchingScroll) return;
+    if (this.form.invalid || this.isSearchingScroll) return;
 
     this.isSearchingScroll = true;
+    this.form.disable();
 
     const {searchTerm} = this.form.value;
     this.offset += 10;
